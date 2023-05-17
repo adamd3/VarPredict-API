@@ -1,2 +1,3 @@
 # VarPredict-API
-An API for the VarPredict package
+
+An API for the VarPredict package (work in progress)
