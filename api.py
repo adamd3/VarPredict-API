@@ -1,6 +1,7 @@
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, File
 import pandas as pd
 import pickle
+import sklearn
 import logging
 
 app = FastAPI()
@@ -13,9 +14,9 @@ except FileNotFoundError:
     best_models = {}
 
 try:
-    sample_genotypes = pd.read_csv("sample_genotypes.csv")
+    sample_genotypes = pd.read_csv("sample_genotypes.tsv", sep="\t")
 except FileNotFoundError:
-    logging.error("Failed to load sample_genotypes.csv")
+    logging.error("Failed to load sample_genotypes.tsv")
     sample_genotypes = pd.DataFrame()
 
 class GenotypesData:
@@ -24,7 +25,7 @@ class GenotypesData:
 
     @classmethod
     def from_file(cls, file: UploadFile):
-        df = pd.read_csv(file.file)
+        df = pd.read_csv(file.file, sep="\t")
         return cls(df)
 
     def validate_columns(self):
@@ -38,7 +39,9 @@ class GenotypesData:
 
 
 @app.post("/predict/")
-def predict_gene_expression(genotypes_data: GenotypesData):
+def predict_gene_expression(file: UploadFile = File(...)):
+    genotypes_data = GenotypesData.from_file(file)
+
     if not genotypes_data.validate_columns():
         return {"message": "Invalid columns"}
 
@@ -62,3 +65,8 @@ def predict_gene_expression(genotypes_data: GenotypesData):
 
 logging.basicConfig(level=logging.ERROR, filename="api.log", filemode="a",
                     format="%(asctime)s - %(levelname)s - %(message)s")
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
