@@ -7,4 +7,4 @@ def test_predict_gene_expression(file_path):
     response = requests.post(url, files=files)
     print(response.json())
 
-test_predict_gene_expression("sample_genotypes.tsv")
+test_predict_gene_expression("./model_data/sample_genotypes.tsv")
