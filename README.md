@@ -1,6 +1,6 @@
 # VarPredict-API
 
-![VarPredict-API](https://github.com/adamd3/OrthoQuant/actions/workflows/deploy.yml/badge.svg)
+![VarPredict-API](https://github.com/adamd3/VarPredict-API/actions/workflows/deploy.yml/badge.svg)
 
 This is an API for the [VarPredict](https://github.com/adamd3/VarPredict/) package. It allows one to query the model to predict gene expression given a set of genetic variants.
 
