@@ -1,0 +1,40 @@
+name: Deploy VarPredict
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: pip install --upgrade pip
+          
+    - name: Run tests
+      run: pytest tests.py
+
+    - name: Build and push Docker image
+      env:
+        AWS_REGION: eu-west-2
+        ECR_REPOSITORY: public.ecr.aws/x5m2g7z3/varpredict
+      run: |
+        echo "${{ secrets.AWS_ACCESS_KEY_ID }}" > aws_access_key_id
+        echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}" > aws_secret_access_key
+        aws configure set aws_access_key_id $(cat aws_access_key_id)
+        aws configure set aws_secret_access_key $(cat aws_secret_access_key)
+        aws configure set region ${{ env.AWS_REGION }}
+        $(aws ecr get-login --no-include-email --region ${{ env.AWS_REGION }})
+        docker build -t ${{ env.ECR_REPOSITORY }} .
+        docker push ${{ env.ECR_REPOSITORY }}
+
