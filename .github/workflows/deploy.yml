@@ -36,5 +36,5 @@ jobs:
       run: |
         docker build -t varpredict .
         docker tag varpredict:latest public.ecr.aws/x5m2g7z3/varpredict:latest
-        aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin varpredict
+        aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin public.ecr.aws/x5m2g7z3/varpredict
         docker push public.ecr.aws/x5m2g7z3/varpredict:latest
