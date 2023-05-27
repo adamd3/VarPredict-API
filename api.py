@@ -22,7 +22,7 @@ except FileNotFoundError:
 
 try:
     sample_genotypes = pd.read_csv(
-        "./model_data/sample_genotypes.tsv", sep="\t")
+        './model_data/sample_genotypes.tsv', sep='\t')
 except FileNotFoundError:
     logging.error("Failed to load sample_genotypes.tsv")
     sample_genotypes = pd.DataFrame()
