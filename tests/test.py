@@ -1,10 +1,16 @@
 import requests
-import json
 
 def test_predict_gene_expression(file_path):
+    file_path = "./model_data/sample_genotypes.tsv"
     url = "http://localhost:80/predict/"  
     files = {"file": open(file_path, "rb")}
     response = requests.post(url, files=files)
-    print(response.json())
+    response_json = response.json()
 
-test_predict_gene_expression("./model_data/sample_genotypes.tsv")
+    assert response.status_code == 200
+
+    print(response_json)
+
+
+if __name__ == "__main__":
+    test_predict_gene_expression()
