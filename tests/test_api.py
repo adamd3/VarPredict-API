@@ -1,7 +1,11 @@
+import pytest
 import requests
 
+@pytest.fixture
+def file_path():
+    return "./model_data/sample_genotypes.tsv"
+
 def test_predict_gene_expression(file_path):
-    file_path = "./model_data/sample_genotypes.tsv"
     url = "http://localhost:80/predict/"  
     files = {"file": open(file_path, "rb")}
     response = requests.post(url, files=files)
