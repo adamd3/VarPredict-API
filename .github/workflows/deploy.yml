@@ -37,12 +37,5 @@ jobs:
         aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
         docker push public.ecr.aws/x5m2g7z3/varpredict:latest
 
-    - name: Create AWS service
-      run: python create_service.py
-      env:
-        AWS_EXECUTION_ROLE_ARN: ${{ secrets.AWS_EXECUTION_ROLE_ARN }}
-        AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }}
-        AWS_SUBNET_ID: ${{ secrets.AWS_SUBNET_ID }}
-
     - name: Run tests
       run: pytest
