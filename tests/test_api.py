@@ -8,15 +8,14 @@ def file_path():
 
 def test_predict_gene_expression(file_path):
     endpoint = get_api_endpoint()
-    if endpoint is not None:
-        url = f"http://{endpoint}:80/predict/"  
-        files = {"file": open(file_path, "rb")}
-        response = requests.post(url, files=files)
-        response_json = response.json()
+    url = f"http://{endpoint}:80/predict/"  
+    files = {"file": open(file_path, "rb")}
+    response = requests.post(url, files=files)
+    response_json = response.json()
 
-        assert response.status_code == 200
+    assert response.status_code == 200
 
-        print(response_json)
+    print(response_json)
 
 def get_api_endpoint():
     ecs_client = boto3.client('ecs')
@@ -26,9 +25,6 @@ def get_api_endpoint():
         cluster='varpredict',
         serviceName='varpredict'
     )
-
-    if len(response['taskArns']) == 0:
-        return None
 
     task_arn = response['taskArns'][0]
 
