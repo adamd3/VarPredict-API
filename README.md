@@ -6,4 +6,4 @@ This is an API for the [VarPredict](https://github.com/adamd3/VarPredict/) packa
 
 ## Example data
 
-See `model_data/sample_genotypes.tsv` for sample genotype data that can be used to extract expression predictions for available genes.
+The API works by accepting a table of genotypes as input. See `model_data/sample_genotypes.tsv` for sample genotype data that can be used to extract expression predictions for available genes.
