@@ -39,6 +39,10 @@ jobs:
 
     - name: Create AWS service
       run: python create_service.py
+      env:
+        AWS_EXECUTION_ROLE_ARN: ${{ secrets.AWS_EXECUTION_ROLE_ARN }
+        AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }
+        AWS_SUBNET_ID: ${{ secrets.AWS_SUBNET_ID }
 
     - name: Run tests
       run: pytest

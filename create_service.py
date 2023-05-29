@@ -7,13 +7,13 @@ security_group_id = os.environ['AWS_SECURITY_GROUP_ID']
 
 ecs_client = boto3.client('ecs')
 
-cluster_name = 'varpredict2'
+cluster_name = 'varpredict'
 response = ecs_client.create_cluster(clusterName=cluster_name)
 cluster_arn = response['cluster']['clusterArn']
 print(f"Cluster ARN: {cluster_arn}")
 
 task_definition = {
-    'family': 'varpredict2',
+    'family': 'varpredict',
     'executionRoleArn': execution_role_arn,
     'cpu': '256',
     'memory': '512',
@@ -44,7 +44,7 @@ response = ecs_client.register_task_definition(**task_definition)
 task_definition_arn = response['taskDefinition']['taskDefinitionArn']
 print(f"Task Definition ARN: {task_definition_arn}")
 
-service_name = 'varpredict2'
+service_name = 'varpredict'
 desired_count = 1
 launch_type = 'FARGATE'
 subnet_ids = [subnet_id]
