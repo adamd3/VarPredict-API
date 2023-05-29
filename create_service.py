@@ -49,19 +49,23 @@ desired_count = 1
 launch_type = 'FARGATE'
 subnet_ids = [subnet_id]
 security_group_ids = [security_group_id]
-response = ecs_client.create_service(
-    cluster=cluster_name,
-    serviceName=service_name,
-    taskDefinition=task_definition_arn,
-    desiredCount=desired_count,
-    launchType=launch_type,
-    networkConfiguration={
-        'awsvpcConfiguration': {
-            'subnets': subnet_ids,
-            'securityGroups': security_group_ids,
-            'assignPublicIp': 'ENABLED'
+
+try:
+    response = ecs_client.create_service(
+        cluster=cluster_name,
+        serviceName=service_name,
+        taskDefinition=task_definition_arn,
+        desiredCount=desired_count,
+        launchType=launch_type,
+        networkConfiguration={
+            'awsvpcConfiguration': {
+                'subnets': subnet_ids,
+                'securityGroups': security_group_ids,
+                'assignPublicIp': 'ENABLED'
+            }
         }
-    }
-)
-service_arn = response['service']['serviceArn']
-print(f"Service ARN: {service_arn}")
+    )
+    service_arn = response['service']['serviceArn']
+    print(f"Service ARN: {service_arn}")
+except ecs_client.exceptions.ServiceAlreadyExistsException:
+    print(f"The service '{service_name}' exists.")
