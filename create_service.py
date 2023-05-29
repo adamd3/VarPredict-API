@@ -67,5 +67,5 @@ try:
     )
     service_arn = response['service']['serviceArn']
     print(f"Service ARN: {service_arn}")
-except ecs_client.exceptions.ServiceAlreadyExistsException:
-    print(f"The service '{service_name}' exists.")
+except ecs_client.exceptions.InvalidParameterException as e:
+    print(f"The service '{service_name}' already exists or the request is not idempotent.")
