@@ -20,8 +20,7 @@ try:
     cluster_arn = response['cluster']['clusterArn']
     print(f"Cluster ARN: {cluster_arn}")
 except Exception as e:
-    print(f"The cluster '{cluster_name}' already exists.")
-
+    continue
 
 task_definition = {
     'family': 'varpredict',
@@ -53,16 +52,11 @@ task_definition = {
 }
 
 try:
-    response = ecs_client.describe_task_definition(
-        taskDefinition=family,
-        include=['TAGS']
-    )
-    task_definition_arn = response['taskDefinition']['taskDefinitionArn']
-    print(f"The task definition '{task_definition_arn}' already exists.")
-except Exception as e:
     response = ecs_client.register_task_definition(**task_definition)
     task_definition_arn = response['taskDefinition']['taskDefinitionArn']
     print(f"Task Definition ARN: {task_definition_arn}")
+except Exception as e:
+    continue
 
 try:
     response = ecs_client.create_service(
@@ -82,4 +76,4 @@ try:
     service_arn = response['service']['serviceArn']
     print(f"Service ARN: {service_arn}")
 except Exception as e:
-    print(f"'{service_name}' already exists or the request is not idempotent.")
+    continue
