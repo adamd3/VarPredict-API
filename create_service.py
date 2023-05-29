@@ -20,7 +20,7 @@ try:
     cluster_arn = response['cluster']['clusterArn']
     print(f"Cluster ARN: {cluster_arn}")
 except Exception as e:
-    continue
+    print(f"Cluster creation failed: {e}")
 
 task_definition = {
     'family': 'varpredict',
@@ -56,7 +56,7 @@ try:
     task_definition_arn = response['taskDefinition']['taskDefinitionArn']
     print(f"Task Definition ARN: {task_definition_arn}")
 except Exception as e:
-    continue
+    print(f"Task Definition creation failed: {e}")
 
 try:
     response = ecs_client.create_service(
@@ -76,4 +76,4 @@ try:
     service_arn = response['service']['serviceArn']
     print(f"Service ARN: {service_arn}")
 except Exception as e:
-    continue
+    print(f"Service creation failed: {e}")
