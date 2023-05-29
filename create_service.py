@@ -8,6 +8,12 @@ security_group_id = os.environ['AWS_SECURITY_GROUP_ID']
 ecs_client = boto3.client('ecs')
 
 cluster_name = 'varpredict'
+task_definition_family = 'varpredict'
+service_name = 'varpredict'
+desired_count = 1
+launch_type = 'FARGATE'
+subnet_ids = [subnet_id]
+security_group_ids = [security_group_id]
 
 try:
     response = ecs_client.create_cluster(clusterName=cluster_name)
@@ -47,18 +53,17 @@ task_definition = {
 }
 
 try:
+    response = ecs_client.describe_task_definition(
+        taskDefinition=family,
+        include=['TAGS']
+    )
+    task_definition_arn = response['taskDefinition']['taskDefinitionArn']
+    print(f"The task definition '{task_definition_arn}' already exists.")
+except ecs_client.exceptions.ClientException:
     response = ecs_client.register_task_definition(**task_definition)
     task_definition_arn = response['taskDefinition']['taskDefinitionArn']
     print(f"Task Definition ARN: {task_definition_arn}")
-except ecs_client.exceptions.InvalidParameterException:
-    print(f"The task definition 'varpredict' already exists or the request is not idempotent.")
-
-service_name = 'varpredict'
-desired_count = 1
-launch_type = 'FARGATE'
-subnet_ids = [subnet_id]
-security_group_ids = [security_group_id]
-
+    
 try:
     response = ecs_client.create_service(
         cluster=cluster_name,
@@ -77,4 +82,4 @@ try:
     service_arn = response['service']['serviceArn']
     print(f"Service ARN: {service_arn}")
 except ecs_client.exceptions.InvalidParameterException as e:
-    print(f"The service '{service_name}' already exists or the request is not idempotent.")
+    print(f"'{service_name}' already exists or the request is not idempotent.")
