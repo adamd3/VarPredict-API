@@ -1,4 +1,4 @@
-name: Deploy VarPredict
+name: Deploy to AWS
 
 on:
   push:
@@ -36,6 +36,9 @@ jobs:
         docker tag varpredict:latest public.ecr.aws/x5m2g7z3/varpredict:latest
         aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
         docker push public.ecr.aws/x5m2g7z3/varpredict:latest
-          
+
+    - name: Create AWS service
+      run: python create_service.py
+
     - name: Run tests
       run: pytest
