@@ -44,5 +44,8 @@ jobs:
         AWS_SECURITY_GROUP_ID: ${{ secrets.AWS_SECURITY_GROUP_ID }}
         AWS_SUBNET_ID: ${{ secrets.AWS_SUBNET_ID }}
 
+    - name: Wait for service deployment
+      run: sleep 300
+
     - name: Run tests
       run: pytest
