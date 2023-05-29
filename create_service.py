@@ -19,7 +19,7 @@ try:
     response = ecs_client.create_cluster(clusterName=cluster_name)
     cluster_arn = response['cluster']['clusterArn']
     print(f"Cluster ARN: {cluster_arn}")
-except ecs_client.exceptions.ClusterExistsException:
+except Exception as e:
     print(f"The cluster '{cluster_name}' already exists.")
 
 
@@ -59,11 +59,11 @@ try:
     )
     task_definition_arn = response['taskDefinition']['taskDefinitionArn']
     print(f"The task definition '{task_definition_arn}' already exists.")
-except ecs_client.exceptions.ClientException:
+except Exception as e:
     response = ecs_client.register_task_definition(**task_definition)
     task_definition_arn = response['taskDefinition']['taskDefinitionArn']
     print(f"Task Definition ARN: {task_definition_arn}")
-    
+
 try:
     response = ecs_client.create_service(
         cluster=cluster_name,
@@ -81,5 +81,5 @@ try:
     )
     service_arn = response['service']['serviceArn']
     print(f"Service ARN: {service_arn}")
-except ecs_client.exceptions.InvalidParameterException as e:
+except Exception as e:
     print(f"'{service_name}' already exists or the request is not idempotent.")
